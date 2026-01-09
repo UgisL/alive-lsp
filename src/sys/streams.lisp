@@ -10,19 +10,23 @@
 
 
 (defun make-io-stream ()
-    #+sbcl (make-instance 'alive/sbcl/streams:io-stream))
+    #+sbcl (make-instance 'alive/sbcl/streams:io-stream)
+    #+lispworks (make-instance 'alive/lw/streams:io-stream))
 
 
 (defun flush-out-stream (obj)
-    #+sbcl (alive/sbcl/streams:flush-out-buffer obj))
+    #+sbcl (alive/sbcl/streams:flush-out-buffer obj)
+    #+lispworks (alive/lw/streams:flush-out-buffer obj))
 
 
 (defun set-in-listener (obj listener)
-    #+sbcl (alive/sbcl/streams:set-in-listener obj listener))
+    #+sbcl (alive/sbcl/streams:set-in-listener obj listener)
+    #+lispworks (alive/lw/streams:set-in-listener obj listener))
 
 
 (defun set-out-listener (obj listener)
-    #+sbcl (alive/sbcl/streams:set-out-listener obj listener))
+    #+sbcl (alive/sbcl/streams:set-out-listener obj listener)
+    #+lispworks (alive/lw/streams:set-out-listener obj listener))
 
 
 (defmacro with-redirect-streams ((&key stdin-fn stdout-fn stderr-fn query-fn trace-fn) &body body)

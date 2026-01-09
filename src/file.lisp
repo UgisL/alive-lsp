@@ -16,15 +16,20 @@
 
 (declaim (ftype (function (string &key (:stdin-fn function) (:stdout-fn function) (:stderr-fn function)) *) do-compile))
 (defun do-compile (path &key stdin-fn stdout-fn stderr-fn)
-    (do-cmd #+sbcl 'alive/sbcl/file:do-compile path :stdin-fn stdin-fn :stdout-fn stdout-fn :stderr-fn stderr-fn))
+    (do-cmd #+sbcl 'alive/sbcl/file:do-compile
+            #+lispworks 'alive/lw/file:do-compile
+            path :stdin-fn stdin-fn :stdout-fn stdout-fn :stderr-fn stderr-fn))
 
 
 (declaim (ftype (function (string &key (:stdin-fn function) (:stdout-fn function) (:stderr-fn function)) *) do-load))
 (defun do-load (path &key stdin-fn stdout-fn stderr-fn)
-    (do-cmd #+sbcl 'alive/sbcl/file:do-load path :stdin-fn stdin-fn :stdout-fn stdout-fn :stderr-fn stderr-fn))
+    (do-cmd #+sbcl 'alive/sbcl/file:do-load
+            #+lispworks 'alive/lw/file:do-load
+            path :stdin-fn stdin-fn :stdout-fn stdout-fn :stderr-fn stderr-fn))
 
 
 (declaim (ftype (function (string) *) try-compile))
 (defun try-compile (path)
     (do-cmd #+sbcl 'alive/sbcl/file:try-compile
+            #+lispworks 'alive/lw/file:try-compile
             path))
