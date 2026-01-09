@@ -22,6 +22,15 @@
          (in-cond-var :accessor in-cond-var
                       :initform (bt:make-condition-variable)
                       :initarg :in-cond-var)
+         (line :accessor line
+               :initform 1
+               :initarg :line)
+         (column :accessor column
+                 :initform 0
+                 :initarg :column)
+         (pos-stack :accessor pos-stack
+                    :initform nil
+                    :initarg :pos-stack)
 
          (out-buffer :accessor out-buffer
                      :initform (make-string-output-stream)
@@ -41,6 +50,11 @@
     (if (eq :eof (in-buffer obj))
         (setf (in-buffer obj) (princ-to-string ch))
         (setf (in-buffer obj) (format nil "~C~A" ch (in-buffer obj))))
+
+    (let ((prev (pop (pos-stack obj))))
+        (when prev
+              (setf (line obj) (car prev)
+                    (column obj) (cdr prev))))
 
     nil)
 
@@ -66,6 +80,13 @@
 
                 (when (zerop (length (in-buffer obj)))
                       (setf (in-buffer obj) :eof))
+
+                (setf (pos-stack obj)
+                      (list (cons (line obj) (column obj))))
+                (if (char= ch #\newline)
+                    (progn (incf (line obj))
+                           (setf (column obj) 0))
+                    (incf (column obj)))
 
                 ch))))
 
@@ -93,6 +114,9 @@
     (if (char= #\newline ch)
         (flush-out-buffer obj)
         (write-char ch (out-buffer obj))))
+
+(defmethod stream:stream-line-column ((obj io-stream))
+    (values (line obj) (column obj)))
 
 
 (defun set-in-listener (obj listener)
