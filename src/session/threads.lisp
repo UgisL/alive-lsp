@@ -82,13 +82,15 @@
 
 (declaim (ftype (function (deps:dependencies state:state condition cons) null) start-debugger))
 (defun start-debugger (deps state err frames)
-    (let* ((restarts (compute-restarts err))
-           (ndx (wait-for-debug deps state err
-                                (mapcar (lambda (item)
-                                            (restart-info:create-item :name (restart-name item)
-                                                                      :description (princ-to-string item)))
-                                        restarts)
-                                frames)))
+    (let* ((restarts (or (compute-restarts err)
+                         (compute-restarts)))
+           (restart-items (loop :for item :in restarts
+                                :for ndx :from 0
+                                :for name := (restart-name item)
+                                :collect (restart-info:create-item
+                                             :name (or name (format nil "restart-~D" ndx))
+                                             :description (princ-to-string item))))
+           (ndx (wait-for-debug deps state err restart-items frames)))
 
         (when (and ndx
                    (<= 0 ndx (- (length restarts) 1)))
@@ -106,6 +108,12 @@
                                (declare (ignore h))
                                (start-debugger deps state c (alive/frames:list-debug-frames))
                                (return-from run-with-debugger))))
+        #+lispworks
+        (handler-bind ((serious-condition (lambda (c)
+                                             (start-debugger deps state c (alive/frames:list-debug-frames))
+                                             (return-from run-with-debugger))))
+            (funcall fn))
+        #-lispworks
         (funcall fn)))
 
 

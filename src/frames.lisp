@@ -112,9 +112,36 @@
 
 #+lispworks
 (progn
+    (defun lw-backtrace-string ()
+        (let ((bt-fn (find-symbol "OUTPUT-BACKTRACE" "DBG")))
+            (with-output-to-string (s)
+                (let ((*standard-output* s))
+                    (if (and bt-fn (fboundp bt-fn))
+                        (funcall bt-fn)
+                        (format s "No backtrace available."))))))
+
+    (defun split-lines (text)
+        (with-input-from-string (in text)
+            (loop :for line := (read-line in nil nil)
+                  :while line
+                  :for trimmed := (string-trim '(#\Space #\Tab) line)
+                  :when (< 0 (length trimmed))
+                      :collect trimmed)))
+
+    (defun line-to-frame (line)
+        (let ((obj (make-hash-table :test #'equalp)))
+            (setf (gethash "function" obj) line)
+            obj))
+
     (defun list-step-frames ()
-        nil)
+        (list-debug-frames))
 
     (defun list-debug-frames (&optional limit)
-        (declare (ignore limit))
-        nil))
+        (let* ((lines (split-lines (lw-backtrace-string)))
+               (frames (loop :for line :in lines
+                             :for ndx :from 0
+                             :while (or (not limit) (< ndx limit))
+                             :collect (line-to-frame line))))
+            (if frames
+                frames
+                (list (line-to-frame "LispWorks backtrace unavailable"))))))
