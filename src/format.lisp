@@ -147,8 +147,7 @@
 
 
 (defun do-indent (out num str)
-    (declare (type stream out)
-             (type fixnum num))
+    (declare (type fixnum num))
 
     (loop :repeat num
           :do (format out "~A" str)))

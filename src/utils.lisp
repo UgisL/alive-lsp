@@ -11,9 +11,7 @@
 (defun fuzzy-match (pref str)
     (cond ((zerop (length pref)) T)
           ((zerop (length str)) NIL)
-          (T (loop :with to-match := (elt pref 0)
-
-                   :for ch :across str :do
+          (T (loop :for ch :across str :do
                        (when (and (< 0 (length pref))
                                   (or (char= ch (char-upcase (elt pref 0)))
                                       (char= ch (char-downcase (elt pref 0)))))

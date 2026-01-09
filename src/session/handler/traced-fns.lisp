@@ -24,7 +24,6 @@
 (declaim (ftype (function (string cons) (values (or null string) (or null string))) get-function-for-pos))
 (defun get-function-for-pos (text pos)
     (loop :with done := nil
-          :with to-trace := nil
           :with fn-name := nil
           :with pkg-name := nil
           :with colons := nil

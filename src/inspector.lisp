@@ -54,8 +54,11 @@
         (princ-to-string (alive/symbols:get-lambda-list name pkg-name)))
 
     (setf (gethash "value" result)
-        (with-output-to-string (str)
-            (disassemble sym :stream str))))
+        #+sbcl (with-output-to-string (str)
+                   (disassemble sym :stream str))
+        #+lispworks (with-output-to-string (str)
+                      (let ((*standard-output* str))
+                          (disassemble sym)))))
 
 
 (defun hash-table-to-result (result obj)
