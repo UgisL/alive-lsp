@@ -9,11 +9,10 @@
 
 (declaim (ftype (function (T) (or null simple-string)) get-id))
 (defun get-id (thread)
-    #+sbcl (alive/sbcl/threads:get-thread-id thread)
-    #+lispworks (alive/lw/threads:get-thread-id thread))
+    #+sbcl (alive/sbcl/threads:get-thread-id thread))
 
 
-(declaim (ftype (function (T) hash-table) thread-to-wire))
+(declaim (ftype (function (sb-thread:thread) hash-table) thread-to-wire))
 (defun thread-to-wire (thread)
     (let ((table (make-hash-table :test #'equalp)))
         (setf (gethash "id" table) (get-id thread))

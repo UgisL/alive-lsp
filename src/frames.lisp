@@ -6,10 +6,6 @@
 (in-package :alive/frames)
 
 
-#+sbcl
-(progn
-
-
 (defun get-fun-name (frame)
     (let* ((dbg-fun (sb-di:frame-debug-fun frame))
            (name (when dbg-fun
@@ -107,14 +103,3 @@
         (if limit
             (list-frames top-frame limit)
             (list-frames top-frame))))
-
-)
-
-#+lispworks
-(progn
-    (defun list-step-frames ()
-        nil)
-
-    (defun list-debug-frames (&optional limit)
-        (declare (ignore limit))
-        nil))

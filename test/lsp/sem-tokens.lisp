@@ -473,7 +473,7 @@
 
 (defun test-octets ()
     (clue:test "Octets"
-        (check-combo (format nil "(flexi-streams:octets-to-string octets~%'())~%(+ () () ())")
+        (check-combo (format nil "(sb-ext:octets-to-string octets~%'())~%(+ () () ())")
                      (list (sem-types:create
                                :token-type sem-types:*parenthesis*
                                :line 0

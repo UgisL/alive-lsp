@@ -53,13 +53,11 @@
 
 
 (defun function-p (name &optional pkg-name)
-    #+sbcl (alive/sbcl/symbols:function-p name pkg-name)
-    #+lispworks (alive/lw/symbols:function-p name pkg-name))
+    #+sbcl (alive/sbcl/symbols:function-p name pkg-name))
 
 
 (defun get-lambda-list (fn-name &optional pkg-name)
-    #+sbcl (alive/sbcl/symbols:get-lambda-list fn-name pkg-name)
-    #+lispworks (alive/lw/symbols:get-lambda-list fn-name pkg-name))
+    #+sbcl (alive/sbcl/symbols:get-lambda-list fn-name pkg-name))
 
 
 (defun has-lambda-list-p (sym-name &optional pkg-name)
@@ -102,7 +100,6 @@
             (push (string s) syms))))
 
 
-#+sbcl
 (defun lookup-sources (sym)
     (let ((types (list :class
                        :compiler-macro
@@ -133,11 +130,6 @@
                 types
             :initial-value nil)))
 
-#+lispworks
-(defun lookup-sources (sym)
-    (declare (ignore sym))
-    nil)
-
 
 (defun get-range-from-file (file source-path)
     (handler-case
@@ -147,32 +139,22 @@
         (T nil)))
 
 
-#+sbcl
 (defun get-source-file (sym)
     (let* ((src (when sym (lookup-sources sym)))
            (file (when src (sb-introspect:definition-source-pathname src))))
+
         (when file (namestring file))))
 
-#+lispworks
-(defun get-source-file (sym)
-    (declare (ignore sym))
-    nil)
 
-
-#+sbcl
 (defun get-location (sym)
     (let* ((src (when sym (lookup-sources sym)))
            (file (when src (sb-introspect:definition-source-pathname src)))
            (form-path (when src (sb-introspect:definition-source-form-path src))))
+
         (if file
             (list (utils:url-encode-filename (namestring file))
                   (get-range-from-file file form-path))
             (list nil nil))))
-
-#+lispworks
-(defun get-location (sym)
-    (declare (ignore sym))
-    (list nil nil))
 
 
 (defun find-tokens (tokens pos)

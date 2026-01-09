@@ -12,10 +12,6 @@
 (in-package :alive/sys/xref)
 
 
-#+sbcl
-(progn
-
-
 (declaim (ftype (function (string string) *) find-callers))
 (defun find-callers (name pkg-name)
     (let ((to-find (sym:lookup name pkg-name)))
@@ -84,12 +80,3 @@
             (sym:for-pos text pos)
         (when (and name pkg-name)
               (find-references name pkg-name))))
-
-)
-
-#+lispworks
-(progn
-    (declaim (ftype (function (string pos:text-position) (or null cons)) get-locations))
-    (defun get-locations (text pos)
-        (declare (ignore text pos))
-        nil))

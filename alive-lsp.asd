@@ -8,7 +8,7 @@
                  #:cl-json
                  #:bordeaux-threads
                  #:flexi-streams
-                 (:feature :sbcl "sb-introspect"))
+                 #:sb-introspect)
 
     :components ((:module "src"
                           :components ((:file "utils")
@@ -28,14 +28,10 @@
                                        (:file "parse/form")
                                        (:file "parse/forms")
 
-                                       (:file "compat/sbcl/file" :if-feature :sbcl)
-                                       (:file "compat/sbcl/streams" :if-feature :sbcl)
-                                       (:file "compat/sbcl/symbols" :if-feature :sbcl)
-                                       (:file "compat/sbcl/threads" :if-feature :sbcl)
-                                       (:file "compat/lispworks/file" :if-feature :lispworks)
-                                       (:file "compat/lispworks/streams" :if-feature :lispworks)
-                                       (:file "compat/lispworks/symbols" :if-feature :lispworks)
-                                       (:file "compat/lispworks/threads" :if-feature :lispworks)
+                                       (:file "compat/sbcl/file")
+                                       (:file "compat/sbcl/streams")
+                                       (:file "compat/sbcl/symbols")
+                                       (:file "compat/sbcl/threads")
 
                                        (:file "packages")
                                        (:file "symbols")
@@ -110,10 +106,10 @@
 (defsystem "alive-lsp/test"
     :depends-on ("alive-lsp"
                  "clue"
-                 (:feature :sbcl "sb-cover"))
+                 "sb-cover")
     :components ((:module "test"
-                          :components ((:file "compat/sbcl/compile" :if-feature :sbcl)
-                                       (:file "compat/sbcl/symbols" :if-feature :sbcl)
+                          :components ((:file "compat/sbcl/compile")
+                                       (:file "compat/sbcl/symbols")
 
                                        (:file "utils")
 
@@ -166,4 +162,4 @@
                                        (:file "streams")
 
                                        (:file "suite")
-                                       (:file "coverage" :if-feature :sbcl)))))
+                                       (:file "coverage")))))
