@@ -1,7 +1,7 @@
 Alive Language Server
 =====================
 
-This is the language server for [Alive: The Average Lisp VSCode Environment](https://github.com/nobody-famous/alive).
+This is the language server for [Alive: The Average Lisp VSCode Environment](https://github.com/nobody-famous/alive). It supports SBCL and LispWorks.
 
 ## Running the server
 
@@ -14,7 +14,7 @@ For newcomers it could be difficult to start with Common LISP specially if the t
 
 ### Install your LISP Implementation
 
-Here let's assume we install [sbcl](https://www.sbcl.org/)
+Here let's assume we install [sbcl](https://www.sbcl.org/). LispWorks is also supported.
 
 ```bash
 # debian
@@ -112,3 +112,7 @@ Take a look at thread [#31](https://github.com/nobody-famous/alive-lsp/issues/31
 ## Developing Alive-lsp Code
 
 If you are interesting in making changes to Alive-lsp you should take a look at the [Development Notes](README-dev.md).
+
+## Running Tests
+
+`run-tests.sh` and `run-tests.ps1` will run tests with SBCL and/or LispWorks if they are found in `PATH`. For LispWorks, the scripts expect `lw-console` to be available in `PATH` (see LispWorks User Guide 13.3.5 "Saving a non-GUI image with multiprocessing enabled").

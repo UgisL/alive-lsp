@@ -6,6 +6,7 @@
              :check-exists
              :check-has-result
              :print-hash-table
+             :test-path
              :stream-from-string))
 
 (in-package :alive/test/utils)
@@ -29,6 +30,12 @@
     (flexi-streams:make-flexi-stream
         (flexi-streams:make-in-memory-input-stream
             (flexi-streams:string-to-octets str))))
+
+
+(defun test-path (relative)
+    (uiop:native-namestring
+        (uiop:subpathname (asdf:system-source-directory :alive-lsp/test)
+                          relative)))
 
 
 (defun check-equal (obj1 obj2)

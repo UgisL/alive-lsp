@@ -9,6 +9,11 @@
 (defparameter *test-string* "Test String")
 
 
+(defun unread-char* (stream ch)
+    #+sbcl (sb-gray:stream-unread-char stream ch)
+    #+lispworks (stream:stream-unread-char stream ch))
+
+
 (defun test-stdout ()
     (clue:test "Stdout Test"
         (let* ((out (astreams:make-io-stream))
@@ -63,7 +68,7 @@
                            (clue:check-equal :expected #\a
                                              :actual (read-char io))
 
-                           (sb-gray:stream-unread-char io #\a)
+                           (unread-char* io #\a)
                            (clue:check-equal :expected #\a
                                              :actual (read-char io))
 
@@ -74,7 +79,7 @@
                            (clue:check-equal :expected #\d
                                              :actual (read-char io))
 
-                           (sb-gray:stream-unread-char io #\a)
+                           (unread-char* io #\a)
                            (clue:check-equal :expected "aef"
                                              :actual (read-line io)))
                 (close io)))))

@@ -1,12 +1,13 @@
 (defpackage :alive/test/asdf/load
     (:use :cl)
-    (:export :run-all))
+    (:export :run-all)
+    (:local-nicknames (:test-utils :alive/test/utils)))
 
 (in-package :alive/test/asdf/load)
 
 
 (defun load-test-asdf ()
-    (load "test/asdf/foo.asd"))
+    (load (test-utils:test-path "test/asdf/foo.asd")))
 
 
 (defun test-list-systems ()

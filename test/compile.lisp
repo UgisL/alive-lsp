@@ -1,6 +1,7 @@
 (defpackage :alive/test/compile
     (:use :cl)
-    (:export :run-all))
+    (:export :run-all)
+    (:local-nicknames (:test-utils :alive/test/utils)))
 
 (in-package :alive/test/compile)
 
@@ -29,20 +30,23 @@
 (defun test-try-compile ()
     (clue:suite "Try compile"
         (clue:test "Broken"
-            (clue:check-equal :actual (do-compile 'alive/file:try-compile "test/files/compile/broken.lisp")
+            (clue:check-equal :actual (do-compile 'alive/file:try-compile
+                                                  (test-utils:test-path "test/files/compile/broken.lisp"))
                               :expected (list alive/types:*sev-error*
                                               alive/types:*sev-info*
                                               alive/types:*sev-warn*
                                               alive/types:*sev-warn*)))
 
         (clue:test "Parens"
-            (clue:check-equal :actual (do-compile 'alive/file:try-compile "test/files/compile/parens.lisp")
+            (clue:check-equal :actual (do-compile 'alive/file:try-compile
+                                                  (test-utils:test-path "test/files/compile/parens.lisp"))
                               :expected (list alive/types:*sev-error*)))))
 
 
 (defun test-compile ()
     (clue:test "Compile"
-        (clue:check-equal :actual (do-compile 'alive/file:do-compile "test/files/compile/broken.lisp")
+        (clue:check-equal :actual (do-compile 'alive/file:do-compile
+                                              (test-utils:test-path "test/files/compile/broken.lisp"))
                           :expected (list alive/types:*sev-error*
                                           alive/types:*sev-info*
                                           alive/types:*sev-warn*
@@ -51,13 +55,13 @@
 
 (defun test-load-errors ()
     (clue:test "Load File Errors"
-        (clue:check-equal :actual (do-load "test/files/compile/load-errors.lisp")
+        (clue:check-equal :actual (do-load (test-utils:test-path "test/files/compile/load-errors.lisp"))
                           :expected (list alive/types:*sev-error*))))
 
 
 (defun test-load-ok ()
     (clue:test "Load File OK"
-        (clue:check-equal :actual (do-load "test/files/compile/load-ok.lisp")
+        (clue:check-equal :actual (do-load (test-utils:test-path "test/files/compile/load-ok.lisp"))
                           :expected (list))))
 
 
