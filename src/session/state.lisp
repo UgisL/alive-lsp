@@ -61,7 +61,7 @@
 
     (history (make-array 3) :type array)
 
-    (lock (bt:make-recursive-lock) :type sb-thread:mutex))
+    (lock (bt:make-recursive-lock) :type t))
 
 
 (declaim (ftype (function (&key (:log (or null logger:logger))) state) create))
